@@ -1,52 +1,52 @@
+function getInputValue(InputItem) {
+    const Input = document.getElementById(InputItem);
+    const InputText = Input.value;
+    const InputValue = parseFloat(InputText);
 
-// Deposit Section 
-document.getElementById('deposit-button').addEventListener('click', function () {
-    //Deposit Input 
-    const depositInput = document.getElementById('deposit-input');
-    const depositInputText = depositInput.value;
-    const depositInputValue = parseFloat(depositInputText);
-    // console.log(depositInputValue)
+    // Clear the Input Field
+    Input.value = '';
+    return InputValue;
+}
 
-    //Deposit total 
-    const depositTotal = document.getElementById('deposit-total');
+function totalValue(Balance, depositInputValue) {
+    const depositTotal = document.getElementById(Balance);
     const depositTotalText = depositTotal.innerText;
     const newDepositValue = parseFloat(depositTotalText);
-    const totalDepositValue = depositInputValue + newDepositValue;
-    depositTotal.innerText = totalDepositValue;
+    depositTotal.innerText = depositInputValue + newDepositValue;
+}
 
-    //Update Deposit Balance
+function updateTotalBalance(depositInputValue, isadd) {
     const depositTotalBalance = document.getElementById("balance-total");
     const depositTotalBalanceText = depositTotalBalance.innerText;
     const newDepositTotal = parseFloat(depositTotalBalanceText);
-    const amountAfterDeposit = newDepositTotal + depositInputValue;
-    depositTotalBalance.innerText = amountAfterDeposit;
+    if (isadd == true) {
 
-    // Clear the Input Field
-    depositInput.value = '';
+        depositTotalBalance.innerText = newDepositTotal + depositInputValue;
+    }
+    else {
+        depositTotalBalance.innerText = newDepositTotal - depositInputValue;
+    }
+}
+
+
+
+
+// Deposit Section 
+document.getElementById('deposit-button').addEventListener('click', function () {
+    const depositInputValue = getInputValue('deposit-input');
+    if (depositInputValue > 0) {
+        totalValue('deposit-total', depositInputValue);
+        updateTotalBalance(depositInputValue, true);
+    }
+
 })
 
 // Withdraw Section 
 document.getElementById('withdraw-button').addEventListener('click', function () {
-    //Withdraw Input
-    const withdrawInput = document.getElementById('withdraw-input');
-    const withdrawInputText = withdrawInput.value;
-    const newWithdrawAmount = parseFloat(withdrawInputText);
-    // console.log(newWithdrawAmount);
+    const newWithdrawAmount = getInputValue('withdraw-input');
+    if (newWithdrawAmount > 0) {
+        totalValue('withdraw-total', newWithdrawAmount);
+        updateTotalBalance(newWithdrawAmount, false);
+    }
 
-
-    // Withdraw Total
-    const withdrawTotal = document.getElementById('withdraw-total');
-    const withdrawTotalText = withdrawTotal.innerText;
-    const withdrawTotalValue = parseFloat(withdrawTotalText);
-    const newWithdrawTotal = newWithdrawAmount + withdrawTotalValue;
-    withdrawTotal.innerText = newWithdrawTotal;
-
-    // Update Withdraw Balance 
-    const withdrawBalance = document.getElementById("balance-total");
-    const withdrawBalanceText = withdrawBalance.innerText;
-    const newWithdrawBalance = parseFloat(withdrawBalanceText);
-    const totalWithdrawBalance = newWithdrawBalance - newWithdrawAmount;
-    withdrawBalance.innerText = totalWithdrawBalance;
-    // Clear The input Field
-    withdrawInput.value = '';
 })
